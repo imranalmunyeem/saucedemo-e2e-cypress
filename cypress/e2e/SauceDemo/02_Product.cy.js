@@ -21,7 +21,7 @@ describe('Sauce Demo - [PRODUCT PAGE]', () => {
     ProductPage.verifyCartBadge('1');
   });
 
-  it.only('TC_007: Remove product from cart', () => {
+  it('TC_007: Remove product from cart', () => {
     ProductPage.addProductToCart();
     ProductPage. navigateToCart()
     ProductPage.removeProductFromCart();

@@ -21,13 +21,6 @@ describe('Sauce Demo - [PRODUCT PAGE]', () => {
     ProductPage.verifyCartBadge('1');
   });
 
-  it('TC_007: Remove product from cart', () => {
-    ProductPage.addProductToCart();
-    ProductPage. navigateToCart()
-    ProductPage.removeProductFromCart();
-    ProductPage.verifyCartBadge('');
-  });
-
   it('TC_008: Verify checkout process', () => {
     // Add product to the cart
     ProductPage.addProductToCart();

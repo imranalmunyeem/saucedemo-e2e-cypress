@@ -24,13 +24,16 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci  # Faster & ensures dependencies match package-lock.json
+
+      - name: Ensure results directory exists
+        run: mkdir -p cypress/results  # Avoid "no files found" error
 
       - name: Run Cypress tests (Production)
-        run: cross-env ENV=prod npm run test:ci
+        run: npx cross-env ENV=prod npm run test:ci
 
       - name: Run Cypress tests (Development)
-        run: cross-env ENV=dev npm run test:ci
+        run: npx cross-env ENV=dev npm run test:ci
 
       - name: Upload test results (if using mochawesome)
         if: always()

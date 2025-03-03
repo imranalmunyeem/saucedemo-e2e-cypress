@@ -9,10 +9,15 @@ on:
       - main  # Runs tests for every PR to 'main'
   schedule:
     - cron: "0 12 * * 1-5"  # Runs tests Monday to Friday at noon (UTC)
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [prod, dev]
 
     steps:
       - name: Checkout repository
@@ -22,22 +27,58 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci  # Faster & ensures dependencies match package-lock.json
+        run: npm ci
 
-      - name: Ensure results directory exists
-        run: mkdir -p cypress/results  # Avoid "no files found" error
+      - name: Run Cypress tests (${{ matrix.environment }})
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: false
+          record: false
+          config: video=false,screenshotOnRunFailure=true
+        env:
+          ENV: ${{ matrix.environment }}
+          # Add any other environment-specific variables here
+          CYPRESS_BASE_URL: ${{ matrix.environment == 'prod' && 'https://www.saucedemo.com' || 'https://dev.saucedemo.com' }}
 
-      - name: Run Cypress tests (Production)
-        run: npx cross-env ENV=prod npm run test:ci
+      - name: Create Mochawesome report directory
+        if: always()
+        run: |
+          mkdir -p cypress/reports/mochawesome-report
+          
+      - name: Generate Mochawesome report
+        if: always()
+        run: |
+          [ -d cypress/reports/mochawesome-report ] && find cypress/reports/mochawesome-report -name '*.json' -exec cat {} \; > cypress/reports/mochawesome-merged.json || echo "No report files found"
+          npx mochawesome-merge cypress/reports/mochawesome-report/*.json -o cypress/reports/full-report.json || echo "Failed to merge reports, possibly no test results"
 
-      - name: Run Cypress tests (Development)
-        run: npx cross-env ENV=dev npm run test:ci
+      - name: Generate unique identifier
+        id: uniqid
+        run: |
+          echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
+          echo "random=$(openssl rand -hex 4)" >> $GITHUB_OUTPUT
 
-      - name: Upload test results (if using mochawesome)
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-results
-          path: cypress/results
+          name: cypress-results-${{ matrix.environment }}-${{ steps.uniqid.outputs.timestamp }}-${{ steps.uniqid.outputs.random }}
+          path: |
+            cypress/reports
+            cypress/screenshots
+          retention-days: 30
+          if-no-files-found: warn
+          overwrite: true
+
+      - name: Upload bug reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bug-reports-${{ steps.uniqid.outputs.timestamp }}-${{ steps.uniqid.outputs.random }}
+          path: docs/bug-reports.csv
+          retention-days: 30
+          if-no-files-found: warn
+          overwrite: true

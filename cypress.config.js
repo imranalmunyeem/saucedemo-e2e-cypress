@@ -18,31 +18,29 @@ module.exports = defineConfig({
   // Set retries to 1 for failed test cases
   retries: 1,
 
-  // Video settings
-  video: true,
-  videoCompression: true,
+  // Screenshot and video settings
+  video: false,
+  screenshotOnRunFailure: true,
 
   // Reporter configuration for Mochawesome
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
-    reportDir: "cypress/reports/saucedemo-ui-tests-report", // Custom report directory
-    overwrite: false, // Prevent overwriting previous reports
-    html: true, // Generate HTML report
-    json: true, // Generate JSON report
-    charts: true, // Enable charts in the report
+    reportDir: "cypress/reports/mochawesome-report",
+    overwrite: true,
+    html: true,
+    json: true,
+    timestamp: "mmddyyyy_HHMMss",
+    charts: true,
+    reportPageTitle: "SauceDemo Test Report",
     embeddedScreenshots: true,
-    inclineAssets: true,
-    autoOpen: false,
-    code: true,
-    showPassed: true,
+    inlineAssets: true,
     saveAllAttempts: false,
-    reportPageTitle: "SauceDemo Test Report", // Custom title
-    reportFilename: "saucedemo-report", // Custom report file name
-    timestamp: "longDate" // Append timestamp to avoid overwrites
+    quiet: true
   },
 
   // Configure Cypress E2E tests
   e2e: {
+    testIsolation: false,
     setupNodeEvents(on, config) {
       // Dynamically set the baseUrl based on the ENV environment variable
       const environment = process.env.ENV || 'prod'; // Default to 'prod' if ENV is not set
@@ -55,6 +53,10 @@ module.exports = defineConfig({
 
       return config; // Always return the modified config
     },
+
+    // Set the pattern to match the actual test files in SauceDemo folder
+    specPattern: ['cypress/e2e/SauceDemo/*.cy.js'],
+    excludeSpecPattern: ['cypress/e2e/examples/*.js', 'cypress/e2e/examples/*.ts'],
 
     // Optional: Set the default timeout for commands and assertions
     defaultCommandTimeout: 10000,

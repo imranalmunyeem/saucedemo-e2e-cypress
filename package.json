@@ -1,0 +1,32 @@
+{
+  "name": "saucedemo-e2e-cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "test:ci": "cypress run --browser chrome --headless --env ENV=$ENV",
+    "test:headed": "npx cypress run --headed --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:gui": "npx cypress open",
+    "test:record": "npx cypress run --record --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:chrome": "npx cypress run --browser chrome --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:firefox": "npx cypress run --browser firefox --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:edge": "npx cypress run --browser edge --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:dev": "ENV=dev npx cypress run --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:prod": "ENV=prod npx cypress run --spec cypress/e2e/SauceDemo/*.cy.js",
+    "test:report": "npx cypress run --reporter mochawesome --spec cypress/e2e/SauceDemo/*.cy.js",
+    "merge:report": "node merge-reports.js",
+    "test:full-report": "npm run test:report && npm run merge:report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cypress/grep": "^4.1.0",
+    "cross-env": "^7.0.3",
+    "cypress": "^14.1.0",
+    "cypress-mochawesome-reporter": "^3.8.2",
+    "cypress-xpath": "^2.0.1"
+  }
+}

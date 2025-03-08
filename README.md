@@ -77,26 +77,25 @@ The tests follow a modular and maintainable structure:
 ```
 |-- .github
 |     |-- workflows
-|          |-- cypress-tests.yml
+|          |-- cypress-tests.yml                # GitHub Actions CI/CD workflow
 |-- cypress
 |     |-- e2e
 |          |-- SauceDemo
-|                |-- login.cy.js
-|                |-- product.cy.js
+|                |-- login.spec.js              # Login test cases
+|                |-- product.spec.js            # Product page test cases
 |     |-- fixtures
 |           |-- request-body
-|                |-- login_credentials.json
-|     |-- reports
+|                |-- login_credentials.json     # Test data
+|     |-- reports                               # Stores test execution reports
 |     |-- support
 |          |-- pages
-|                |-- LoginPage.js
-|                |-- ProductPage.js
-|          |-- commands.js
-|          |-- e2e.js
+|                |-- LoginPage.js               # Page Object Model for Login page
+|                |-- ProductPage.js             # Page Object Model for Product page
+|          |-- commands.js                      # Custom Cypress commands
+|          |-- e2e.js                           # Global test configurations
 |-- .gitignore
-|-- cypress.config.js
-|-- package.json
-|          |-- Contains Custom Scripts
+|-- cypress.config.js                           # Cypress configuration settings
+|-- package.json                                # Project dependencies and custom scripts
 ```
 
 - `cypress/e2e`: Contains the actual test files. You can organize your tests into subdirectories as needed. 

@@ -12,6 +12,14 @@ describe('Sauce Demo - [LOGIN]', () => {
   });
 
   it('TC_001:Login with valid credentials', () => {
+    LoginPage.enterUsername(credentials.valid_username_1);
+    LoginPage.enterPassword(credentials.valid_password);
+    LoginPage.clickLogin();
+    cy.get('[data-test="title"]').should('be.visible').and('contain','Products')
+    
+  });
+
+  it('TC_002:Login with invalid credentials', () => {
     const randomUsername = faker.internet.userName();
     const randomPassword = faker.internet.password();
 
@@ -23,15 +31,6 @@ describe('Sauce Demo - [LOGIN]', () => {
     // This assumes the login will fail because Faker generates random, non-existing credentials
   });
 
-  it('TC_002:Login with invalid credentials', () => {
-    LoginPage.enterUsername(credentials.invalid_username);
-    LoginPage.enterPassword(credentials.invalid_password);
-    LoginPage.clickLogin();
-    
-    // Verify error message
-    LoginPage.verifyLoginFailure('Username and password do not match');
-  });
-
   it('TC_003: Login with empty fields', () => {
     cy.get('[data-test="username"]').clear();
     cy.get('[data-test="password"]').clear();
@@ -41,7 +40,7 @@ describe('Sauce Demo - [LOGIN]', () => {
 
   it('TC_004: Login with empty username field', () => {
     cy.get('[data-test="username"]').clear();
-    LoginPage.enterPassword(credentials.valid_password_1);
+    LoginPage.enterPassword(credentials.valid_password);
     cy.get('[data-test="login-button"]').click();
     cy.get('[data-test="error"]').should('be.visible').and('contain', 'Epic sadface: Username is required');
   });

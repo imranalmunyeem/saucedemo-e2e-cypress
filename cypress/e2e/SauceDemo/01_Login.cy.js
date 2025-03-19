@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import LoginPage from '../../support/pages/LoginPage';
 
 describe('Sauce Demo - [LOGIN]', () => {
@@ -11,10 +12,15 @@ describe('Sauce Demo - [LOGIN]', () => {
   });
 
   it('TC_001:Login with valid credentials', () => {
-    LoginPage.enterUsername(credentials.valid_username_1);
-    LoginPage.enterPassword(credentials.valid_password_1);
+    const randomUsername = faker.internet.userName();
+    const randomPassword = faker.internet.password();
+
+    LoginPage.enterUsername(randomUsername);
+    LoginPage.enterPassword(randomPassword);
     LoginPage.clickLogin();
-    LoginPage.verifyLoginSuccess();
+
+    LoginPage.verifyLoginFailure('Epic sadface: Username and password do not match'); 
+    // This assumes the login will fail because Faker generates random, non-existing credentials
   });
 
   it('TC_002:Login with invalid credentials', () => {

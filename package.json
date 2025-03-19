@@ -24,9 +24,12 @@
   "type": "commonjs",
   "devDependencies": {
     "@cypress/grep": "^4.1.0",
+    "@faker-js/faker": "^9.6.0",
     "cross-env": "^7.0.3",
-    "cypress": "^14.1.0",
     "cypress-mochawesome-reporter": "^3.8.2",
     "cypress-xpath": "^2.0.1"
+  },
+  "dependencies": {
+    "cypress": "^14.2.0"
   }
 }

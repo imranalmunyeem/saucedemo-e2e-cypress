@@ -30,7 +30,21 @@ describe('Sauce Demo - [LOGIN]', () => {
     cy.get('[data-test="username"]').clear();
     cy.get('[data-test="password"]').clear();
     cy.get('[data-test="login-button"]').click();
-    cy.get('[data-test="error"]').should('be.visible').and('contain', 'Username is required');
+    cy.get('[data-test="error"]').should('be.visible').and('contain', 'Epic sadface: Username is required');
+  });
+
+  it('TC_004: Login with empty username field', () => {
+    cy.get('[data-test="username"]').clear();
+    LoginPage.enterPassword(credentials.valid_password_1);
+    cy.get('[data-test="login-button"]').click();
+    cy.get('[data-test="error"]').should('be.visible').and('contain', 'Epic sadface: Username is required');
+  });
+
+  it('TC_005: Login with empty password fields', () => {
+    LoginPage.enterUsername(credentials.valid_username_1);
+    cy.get('[data-test="password"]').clear();
+    cy.get('[data-test="login-button"]').click();
+    cy.get('[data-test="error"]').should('be.visible').and('contain', 'Epic sadface: Password is required');
   });
 
 });

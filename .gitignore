@@ -1,0 +1,18 @@
+# 💡 Node Modules (Dependencies)
+node_modules/
+package-lock.json
+
+# 💡 Cypress Output Files
+cypress/videos/
+cypress/screenshots/
+cypress/reports/
+
+# 💡 Cypress Configurations (User-Specific)
+cypress.env.json
+
+# 💡 Environment Variables (Sensitive Data)
+.env
+.env.local
+.env.development
+.env.production
+.env.test

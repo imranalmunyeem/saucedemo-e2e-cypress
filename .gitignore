@@ -6,6 +6,7 @@ package-lock.json
 cypress/videos/
 cypress/screenshots/
 cypress/reports/
+cypress/bug_reports/
 
 # 💡 Cypress Configurations (User-Specific)
 cypress.env.json

@@ -4,10 +4,10 @@ const XLSX = require('xlsx');
 
 module.exports = {
   writeBugReport({ testCaseId, issueDescription, screenshotPath }) {
-    console.log("📌 Writing bug report..."); // Debug log
+    console.log("📌 Writing bug report..."); 
 
-    // Corrected file path to save in 'cypress/reports/'
-    const filePath = path.join(__dirname, '..', '..', 'cypress', 'reports', 'bug_reports.xlsx');
+    // file path 
+    const filePath = path.join(__dirname, '..', '..', 'cypress', 'bug_reports', 'bug_reports.xlsx');
 
     let workbook;
     let sheetName = 'Bug Reports';

@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const xlsConfig = require("./cypress/plugins/xlsConfig");
 
 module.exports = defineConfig({
   // Define environment variables for prod and dev URLs
@@ -50,6 +51,11 @@ module.exports = defineConfig({
 
       // Implement any custom event listeners if necessary
       require('cypress-mochawesome-reporter/plugin')(on);    
+
+      // XLS bug report task
+      on('task', {
+        writeBugReport: xlsConfig.writeBugReport,
+      });
 
       return config; // Always return the modified config
     },

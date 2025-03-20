@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx';
+
 Cypress.Commands.add('visitBaseUrl', (path = '') => {
     const baseUrl = Cypress.env('ENV') === 'dev'
       ? 'https://dev.saucedemo.com'
@@ -11,4 +13,8 @@ Cypress.Commands.add('visitBaseUrl', (path = '') => {
     cy.get('[data-test="username"]').clear().type(username);
     cy.get('[data-test="password"]').clear().type(password);
     cy.get('[data-test="login-button"]').click();
+  });
+
+  Cypress.Commands.add('logBug', (testCaseId, issueDescription, screenshotPath = '') => {
+    cy.task('writeBugReport', { testCaseId, issueDescription, screenshotPath });
   });

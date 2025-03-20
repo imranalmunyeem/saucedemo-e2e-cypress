@@ -9,6 +9,7 @@ describe ('Sauce Demo - [Home Footer]',()=>{
     beforeEach('Navigate to homepage',()=>{
         cy.visitBaseUrl();
     })
+    
     it('TC001:  Verify footer contains accepted usernames', () =>{
         HomeFooter.verifyFooterContainsUsernames();
     })

@@ -1,22 +1,30 @@
 const { defineConfig } = require("cypress");
+const fs = require('fs');
+const path = require('path');
 const xlsConfig = require("./cypress/plugins/xlsConfig");
 
-module.exports = defineConfig({
-  // Define environment variables for prod and dev URLs
-  env: {
-    prod: {
-      baseUrl: 'https://www.saucedemo.com', // Production URL
-    },
-    dev: {
-      baseUrl: 'https://dev.saucedemo.com', // Development URL
-    }
-  },
+// Load URLs from `cypress.urls.json`
+function getUrlsConfig() {
+  const urlsFilePath = path.join(__dirname, "cypress.urls.json");
 
+  if (fs.existsSync(urlsFilePath)) {
+    return require(urlsFilePath);
+  }
+
+  console.warn(`⚠️ URLs file not found: ${urlsFilePath}. Using default production URL.`);
+  return { prod: { baseUrl: "https://www.saucedemo.com" } }; // Fallback
+}
+
+const urlsConfig = getUrlsConfig();
+const environment = process.env.ENV || "prod"; // Default to 'prod' if ENV is not set
+const baseUrl = urlsConfig[environment]?.baseUrl || "https://www.saucedemo.com"; // Fallback
+
+module.exports = defineConfig({
   // Set the default viewport dimensions
   viewportHeight: 760,
   viewportWidth: 1100,
 
-  // Set retries to 1 for failed test cases
+  // Set retries for failed test cases
   retries: 1,
 
   // Screenshot and video settings
@@ -42,15 +50,11 @@ module.exports = defineConfig({
   // Configure Cypress E2E tests
   e2e: {
     testIsolation: false,
+    baseUrl, // Dynamically set baseUrl
+
     setupNodeEvents(on, config) {
-      // Dynamically set the baseUrl based on the ENV environment variable
-      const environment = process.env.ENV || 'prod'; // Default to 'prod' if ENV is not set
-      const baseUrl = config.env[environment].baseUrl;
-
-      config.baseUrl = baseUrl; // Set the baseUrl dynamically
-
-      // Implement any custom event listeners if necessary
-      require('cypress-mochawesome-reporter/plugin')(on);    
+      // Implement Mochawesome Reporter
+      require('cypress-mochawesome-reporter/plugin')(on);
 
       // XLS bug report task
       on('task', {

@@ -1,0 +1,9 @@
+{
+    "prod": {
+      "baseUrl": "https://www.saucedemo.com"
+    },
+    "dev": {
+      "baseUrl": "https://dev.saucedemo.com"
+    }
+  }
+  

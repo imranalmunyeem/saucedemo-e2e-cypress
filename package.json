@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test:ci": "cross-env ENV=$ENV cypress run --browser chrome --headless",
     "test:headed": "npx cypress run --headed --spec cypress/e2e/SauceDemo/*.cy.js",
     "test:gui": "npx cypress open",
     "test:record": "npx cypress run --record --spec cypress/e2e/SauceDemo/*.cy.js",
@@ -16,7 +15,8 @@
     "test:prod": "cross-env ENV=prod npx cypress run --spec cypress/e2e/SauceDemo/*.cy.js",
     "test:report": "npx cypress run --reporter mochawesome --spec cypress/e2e/SauceDemo/*.cy.js",
     "merge:report": "node merge-reports.js",
-    "test:full-report": "npm run test:report && npm run merge:report"
+    "test:full-report": "npm run test:report && npm run merge:report",
+    "test:security": "npx cypress run --spec 'cypress/e2e/security/*.cy.js'"
   },
   "keywords": [],
   "author": "",

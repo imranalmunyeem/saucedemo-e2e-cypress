@@ -1,68 +1,42 @@
-name: 🧪 Cypress E2E Tests
+name: 🧪 Scheduled Cypress E2E Tests
 
+# ⏰ Schedule: Mon–Fri at 12:00 UTC
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   schedule:
-    - cron: "0 12 * * 1-5"  # Run Mon–Fri at 12:00 UTC
-  workflow_dispatch:
+    - cron: "0 12 * * 1-5"
 
 jobs:
   run-cypress-tests:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        environment: [prod, dev]
+        environment: [prod]
 
     steps:
-      # Checkout repo
-      - name: 📦 Checkout code
+      # 📦 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Node.js
-      - name: 🛠 Setup Node.js
+      # 🛠 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      # Install dependencies
-      - name: 📥 Install dependencies
+      # 📥 Install dependencies
+      - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # Set environment
-      - name: 🌍 Set ENV variable
+      # 🌍 Set ENV for dynamic baseUrl in config
+      - name: Set environment
         run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # Run Cypress tests
-      - name: 🧪 Run Cypress tests
+      # 🧪 Run Cypress tests
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
           headed: false
         env:
           ENV: ${{ matrix.environment }}
-
-      # Rename latest HTML report
-      - name: 📄 Rename latest Mochawesome HTML report
-        if: always()
-        run: |
-          REPORT=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
-          if [ -f "$REPORT" ]; then
-            cp "$REPORT" cypress/reports/mochawesome-report/report.html
-            echo "✅ HTML report renamed successfully"
-          else
-            echo "⚠️ No HTML report found to rename"
-          fi
-
-      # Upload HTML report
-      - name: 📤 Upload HTML report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mochawesome-report-${{ matrix.environment }}
-          path: cypress/reports/mochawesome-report/report.html
-          if-no-files-found: warn

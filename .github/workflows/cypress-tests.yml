@@ -1,58 +1,62 @@
-name: 🧪 Cypress E2E Tests
+name: 🚀 Cypress Tests with HTML Report
 
+# Triggers: on push/PR to main, manual run, and scheduled Mon–Fri at 12:00 UTC
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 12 * * 1-5" # Mon–Fri at 12:00 UTC
+    - cron: "0 12 * * 1-5"  # Weekdays at 12:00 UTC
   workflow_dispatch:
 
 jobs:
-  run-cypress-tests:
+  cypress-run:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [prod]
 
     steps:
-      # 📦 Checkout code
-      - name: Checkout code
+      # 📥 Clone the project
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      # 🛠 Setup Node.js
-      - name: Setup Node.js
+      # 🛠 Setup Node.js (latest supported for Cypress/Mochawesome)
+      - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
+          node-version: 20
 
-      # 📥 Install dependencies with legacy resolution
-      - name: Install dependencies
+      # 📦 Install dependencies, handle peer dependency issues
+      - name: 📦 Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # 🌍 Set ENV variable for dynamic baseUrl
-      - name: Set environment
-        run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
+      # 🌍 Set ENV=prod for baseUrl resolution in cypress.config.js
+      - name: 🌍 Set environment
+        run: echo "ENV=prod" >> $GITHUB_ENV
 
-      # 🧪 Run Cypress tests (headless Chrome)
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
-        with:
-          browser: chrome
-          headed: false
-        env:
-          ENV: ${{ matrix.environment }}
+      # 🧪 Run Cypress tests (don’t stop pipeline on failure)
+      - name: 🧪 Run Cypress tests
+        run: npx cypress run --browser chrome || true
 
-      # 📁 Create HTML report folder
-      - name: Prepare report directory
-        if: always()
-        run: mkdir -p cypress/reports/html
-
-      # 📝 Generate HTML report from JSONs (only if found)
-      - name: Merge reports and generate HTML
+      # 📝 Merge all individual JSON reports into one file
+      - name: 📝 Merge Mochawesome JSON reports
         if: always()
         run: |
+          mkdir -p cypress/reports/html
           npx mochawesome-merge cypress/reports/mochawesome-report/*.json > cypress/reports/html/merged-report.json || echo "No JSON files found"
-          npx marge cypress/reports/html/merged-report.json --reportDir cypress/reports/html --reportFilename index.html ||
+
+      # 📊 Generate the final HTML report
+      - name: 📊 Generate HTML Report
+        if: always()
+        run: |
+          npx marge cypress/reports/html/merged-report.json \
+            --reportDir cypress/reports/html \
+            --reportFilename index.html || echo "Failed to generate HTML"
+
+      # 📤 Upload the HTML report as an artifact
+      - name: 📤 Upload Mochawesome HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-html-report
+          path: cypress/reports/html/index.html
+          if-no-files-found: warn

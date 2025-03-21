@@ -28,7 +28,7 @@ module.exports = defineConfig({
   retries: 1,
 
   // Screenshot and video settings
-  video: false,
+  video: true,
   screenshotOnRunFailure: true,
 
   // Reporter configuration for Mochawesome
@@ -55,7 +55,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // Implement Mochawesome Reporter
       require('cypress-mochawesome-reporter/plugin')(on);
-      require('cypress-grep/src/plugin')(on, config); // For grouping test cases
+      require('@cypress/grep/src/plugin')(on, config); // For grouping test cases
       // XLS bug report task
       on('task', {
         writeBugReport: xlsConfig.writeBugReport,
@@ -65,7 +65,7 @@ module.exports = defineConfig({
     },
 
     // Set the pattern to match the actual test files in SauceDemo folder
-    specPattern: ['cypress/e2e/SauceDemo/*.cy.js', 'cypress/e2e/security/*.cy.js'],
+    specPattern: ['cypress/e2e/SauceDemo/*.cy.js', 'cypress/e2e/security/*.cy.js', 'cypress/e2e/advanced/*.cy.js'],
     excludeSpecPattern: ['cypress/e2e/examples/*.js', 'cypress/e2e/examples/*.ts'],
 
     // Optional: Set the default timeout for commands and assertions

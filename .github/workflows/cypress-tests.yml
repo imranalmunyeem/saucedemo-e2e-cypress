@@ -1,42 +1,44 @@
 name: 🧪 Cypress E2E Tests
 
+# 🚀 Triggers: push, PR to main, manual run, and scheduled run Mon–Fri at 12:00 UTC
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 12 * * 1-5" # Mon–Fri at 12:00 UTC
+    - cron: "0 12 * * 1-5"  # Run Monday–Friday at 12:00 UTC
   workflow_dispatch:
 
 jobs:
   run-cypress-tests:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        environment: [prod]
+        environment: [prod, dev]  # Test both environments
 
     steps:
-      # 📦 Checkout code
+      # 📥 Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🛠 Setup Node.js
+      # ⚙️ Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      # 📥 Install dependencies with legacy resolution
+      # 📦 Install all dependencies
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # 🌍 Set ENV variable for dynamic baseUrl
-      - name: Set environment
+      # 🌍 Set ENV variable to control baseUrl in config
+      - name: Set environment variable
         run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # 🧪 Run Cypress tests (headless Chrome)
+      # 🧪 Run Cypress tests
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
@@ -45,14 +47,30 @@ jobs:
         env:
           ENV: ${{ matrix.environment }}
 
-      # 📁 Create HTML report folder
-      - name: Prepare report directory
-        if: always()
-        run: mkdir -p cypress/reports/html
-
-      # 📝 Generate HTML report from JSONs (only if found)
-      - name: Merge reports and generate HTML
+      # 🔍 Find latest HTML report file and rename it
+      - name: index.html_03212025_043410.html
         if: always()
         run: |
-          npx mochawesome-merge cypress/reports/mochawesome-report/*.json > cypress/reports/html/merged-report.json || echo "No JSON files found"
-          npx marge cypress/reports/html/merged-report.json --reportDir cypress/reports/html --reportFilename index.html ||
+          REPORT_PATH=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
+          echo "Found report: $REPORT_PATH"
+          cp "$REPORT_PATH" cypress/reports/mochawesome-report/report.html || echo "⚠️ No HTML report to copy"
+
+      # 📤 Upload the renamed report as an artifact
+      - name: Upload Mochawesome HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-html-report-${{ matrix.environment }}
+          path: cypress/reports/mochawesome-report/report.html
+          if-no-files-found: warn
+
+      # 🖼 Optionally upload screenshots and videos
+      - name: Upload screenshots and videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: media-${{ matrix.environment }}
+          path: |
+            cypress/screenshots
+            cypress/videos
+          if-no-files-found: warn

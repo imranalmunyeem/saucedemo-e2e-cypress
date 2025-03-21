@@ -29,6 +29,8 @@ This Cypress project is designed for robust end-to-end testing, incorporating be
 - ✅ Advanced Module Integrations:
    - XPath Support – Enables selecting elements using XPath.
    - Cross-Environment Configuration – Allows testing across multiple environments (e.g., production & development) by dynamically setting the base URL.
+   - Integrated browserstack
+   - Used faker.js to load random data dynamically
    - Screenshots & Videos – Automatically captures test evidence for debugging and reporting.
    - Retries on Failures – Configured retries to improve test stability.
    - Test Grouping with Grep – Supports running specific test groups using Cypress grep.
@@ -80,9 +82,12 @@ The tests follow a modular and maintainable structure:
 |          |-- cypress-tests.yml                # GitHub Actions CI/CD workflow
 |-- cypress
 |     |-- e2e
+|          |-- responsiveness
+|                |-- responsivenessTest.spec.js              
 |          |-- SauceDemo
 |                |-- login.spec.js              # Login test cases
 |                |-- product.spec.js            # Product page test cases
+|          |-- Security
 |     |-- fixtures
 |           |-- request-body
 |                |-- login_credentials.json     # Test data

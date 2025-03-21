@@ -41,3 +41,24 @@ jobs:
           headed: false
         env:
           ENV: ${{ matrix.environment }}
+
+      # 📄 Rename dynamic Mochawesome report to static name
+      - name: Rename Mochawesome HTML report
+        if: always()
+        run: |
+          REPORT=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
+          if [ -f "$REPORT" ]; then
+            cp "$REPORT" cypress/reports/mochawesome-report/index.html
+            echo "✅ HTML report renamed to index.html"
+          else
+            echo "⚠️ No HTML report found to rename"
+          fi
+
+      # 📤 Upload the renamed Mochawesome HTML report
+      - name: Upload HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report-${{ matrix.environment }}
+          path: cypress/reports/mochawesome-report/index.html
+          if-no-files-found: warn

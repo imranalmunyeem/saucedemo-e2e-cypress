@@ -9,11 +9,17 @@ Cypress.Commands.add('visitBaseUrl', (path = '') => {
   });
   
 
-  Cypress.Commands.add('userLogin', (username, password) => {
-    cy.get('[data-test="username"]').clear().type(username);
-    cy.get('[data-test="password"]').clear().type(password);
+  Cypress.Commands.add('userLogin', () => {
+    cy.get('[data-test="username"]').clear().type('standard_user');
+    cy.get('[data-test="password"]').clear().type('secret_sauce');
     cy.get('[data-test="login-button"]').click();
   });
+
+  Cypress.Commands.add('logout', () => {
+    cy.get('#react-burger-menu-btn').click();
+    cy.get('[data-test="logout-sidebar-link"]').click();
+  });
+  
 
   Cypress.Commands.add('logBug', (testCaseId, issueDescription, screenshotPath = '') => {
     cy.task('writeBugReport', { testCaseId, issueDescription, screenshotPath });

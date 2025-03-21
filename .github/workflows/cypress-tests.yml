@@ -1,52 +1,43 @@
-name: 🧪 Saucedemo - Cypress E2E Tests
+name: 🧪 Saucedemo-(Cypress E2E Tests)
 
-# 🚀 Triggered manually or Mon–Fri at 12:00 UTC
+# 🚀 Triggers: Manual & Scheduled (Mon–Fri at 12:00 UTC)
 on:
   schedule:
-    - cron: "0 12 * * 1-5"  # Weekdays at 12:00 UTC
-  workflow_dispatch:         # Manual trigger
+    - cron: "0 12 * * 1-5"  # Mon–Fri at 12:00 UTC
+  workflow_dispatch:        # Manual trigger from GitHub Actions UI
 
 jobs:
   run-cypress-tests:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        environment: [prod, dev]  # Supports both prod and dev
+        environment: [prod] 
 
     steps:
-      # 📦 Checkout project code
-      - name: Checkout repository
+      # 📦 Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🛠 Setup Node.js and enable caching
+      # 🛠 Set up Node.js with npm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      # 📥 Install dependencies
+      # 📥 Install project dependencies
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # 🌍 Set ENV variable for Cypress config
-      - name: Set test environment
+      # 🌍 Set ENV variable for dynamic baseUrl
+      - name: Set environment
         run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # 🧪 Run Cypress tests
-      - name: Run Cypress tests on ${{ matrix.environment }}
+      # 🧪 Run Cypress E2E tests
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
           headed: false
         env:
           ENV: ${{ matrix.environment }}
-
-      # ✅ Add summary to GitHub Actions UI
-      - name: Add test summary to GitHub UI
-        if: always()
-        run: |
-          echo "### ✅ Cypress Tests Completed" >> $GITHUB_STEP_SUMMARY
-          echo "- Environment: ${{ matrix.environment }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Triggered by: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY

@@ -1,62 +1,71 @@
-name: 🚀 Cypress Tests with HTML Report
+name: 🧪 Cypress E2E Tests
 
-# Triggers: on push/PR to main, manual run, and scheduled Mon–Fri at 12:00 UTC
+# 🚀 Trigger on push, PR, manual run, and Mon–Fri scheduled run at 12:00 UTC
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 12 * * 1-5"  # Weekdays at 12:00 UTC
+    - cron: "0 12 * * 1-5"
   workflow_dispatch:
 
 jobs:
-  cypress-run:
+  run-cypress-tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [prod, dev]
 
     steps:
-      # 📥 Clone the project
-      - name: 📥 Checkout code
+      # ✅ Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🛠 Setup Node.js (latest supported for Cypress/Mochawesome)
-      - name: 🔧 Setup Node.js
+      # 📦 Setup Node.js environment with caching
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
+          cache: npm
 
-      # 📦 Install dependencies, handle peer dependency issues
-      - name: 📦 Install dependencies
+      # 📥 Install dependencies
+      - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # 🌍 Set ENV=prod for baseUrl resolution in cypress.config.js
-      - name: 🌍 Set environment
-        run: echo "ENV=prod" >> $GITHUB_ENV
+      # 🌍 Set ENV variable to switch baseUrl in config
+      - name: Set environment variable
+        run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # 🧪 Run Cypress tests (don’t stop pipeline on failure)
-      - name: 🧪 Run Cypress tests
-        run: npx cypress run --browser chrome || true
+      # 🧪 Run Cypress tests
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: false
+        env:
+          ENV: ${{ matrix.environment }}
 
-      # 📝 Merge all individual JSON reports into one file
-      - name: 📝 Merge Mochawesome JSON reports
+      # 🧾 Merge all mochawesome JSONs into one
+      - name: Merge Mochawesome JSON reports
         if: always()
         run: |
           mkdir -p cypress/reports/html
           npx mochawesome-merge cypress/reports/mochawesome-report/*.json > cypress/reports/html/merged-report.json || echo "No JSON files found"
 
-      # 📊 Generate the final HTML report
-      - name: 📊 Generate HTML Report
+      # 🖼️ Generate final HTML report from merged JSON
+      - name: Generate HTML Report
         if: always()
         run: |
           npx marge cypress/reports/html/merged-report.json \
             --reportDir cypress/reports/html \
             --reportFilename index.html || echo "Failed to generate HTML"
 
-      # 📤 Upload the HTML report as an artifact
-      - name: 📤 Upload Mochawesome HTML Report
+      # 📤 Upload HTML report to GitHub artifacts
+      - name: Upload HTML Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mochawesome-html-report
+          name: mochawesome-html-report-${{ matrix.environment }}
           path: cypress/reports/html/index.html
           if-no-files-found: warn

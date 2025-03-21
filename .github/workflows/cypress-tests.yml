@@ -63,3 +63,12 @@ jobs:
           path: cypress/reports/mochawesome-report/index.html
           if-no-files-found: warn
 
+      # ✅ Log who triggered the workflow
+      - name: ✍️ Log Trigger Info
+        run: |
+          echo "### 🔔 Trigger Info" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Event**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+            

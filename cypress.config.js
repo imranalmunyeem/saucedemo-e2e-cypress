@@ -55,7 +55,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // Implement Mochawesome Reporter
       require('cypress-mochawesome-reporter/plugin')(on);
-      require('@cypress/grep/src/plugin')(on, config); // For grouping test cases
+      //require('@cypress/grep/src/plugin')(on, config); // For grouping test cases
       // XLS bug report task
       on('task', {
         writeBugReport: xlsConfig.writeBugReport,

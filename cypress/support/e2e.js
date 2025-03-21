@@ -17,6 +17,6 @@
 import './commands'
 import 'cypress-mochawesome-reporter/register'
 import 'cypress-xpath'
-import '@cypress/grep';
-import registerCypressGrep from '@cypress/grep/src/support'
-registerCypressGrep()
+//import '@cypress/grep';
+//import registerCypressGrep from '@cypress/grep/src/support'
+//registerCypressGrep()

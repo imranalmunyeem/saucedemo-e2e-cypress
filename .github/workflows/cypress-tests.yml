@@ -37,7 +37,7 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          browser: chrome
+          browser: [chrome, chromium, firefox, edge, electron]
           headed: false
         env:
           ENV: ${{ matrix.environment }}

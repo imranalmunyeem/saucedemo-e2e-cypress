@@ -1,84 +1,67 @@
-name: Cypress E2E Tests
+name: 🧪 Cypress E2E Tests
 
+# 🚀 Triggers: on push, PR to main, manual run, and Mon–Fri scheduled run at 12:00 UTC
 on:
   push:
-    branches:
-      - main  # Runs tests when code is pushed to 'main'
+    branches: [main]
   pull_request:
-    branches:
-      - main  # Runs tests for every PR to 'main'
+    branches: [main]
   schedule:
-    - cron: "0 12 * * 1-5"  # Runs tests Monday to Friday at noon (UTC)
-  workflow_dispatch:  # Allow manual trigger
+    - cron: "0 12 * * 1-5"  # Mon–Fri at 12:00 UTC
+  workflow_dispatch:
 
 jobs:
-  cypress-run:
+  run-cypress-tests:
     runs-on: ubuntu-latest
+
     strategy:
-      fail-fast: false
       matrix:
-        environment: [prod, dev]
+        environment: [prod, dev]  # Test both environments
 
     steps:
-      - name: Checkout repository
+      # 📦 Get latest code
+      - name: Checkout code
         uses: actions/checkout@v4
 
+      # 🛠 Setup Node.js with caching
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: npm
 
+      # 📥 Install project dependencies
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Cypress tests (${{ matrix.environment }})
+      # 🌍 Set ENV variable for dynamic baseUrl in cypress.config.js
+      - name: Set test environment
+        run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
+
+      # 🧪 Run Cypress tests using Chrome in headless mode
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
           headed: false
-          record: false
-          config: video=false,screenshotOnRunFailure=true
         env:
           ENV: ${{ matrix.environment }}
-          # Add any other environment-specific variables here
-          CYPRESS_BASE_URL: ${{ matrix.environment == 'prod' && 'https://www.saucedemo.com' || 'https://dev.saucedemo.com' }}
 
-      - name: Create Mochawesome report directory
+      # 📝 Merge Mochawesome reports into one JSON file
+      - name: Merge test reports
         if: always()
         run: |
-          mkdir -p cypress/reports/mochawesome-report
-          
-      - name: Generate Mochawesome report
-        if: always()
-        run: |
-          [ -d cypress/reports/mochawesome-report ] && find cypress/reports/mochawesome-report -name '*.json' -exec cat {} \; > cypress/reports/mochawesome-merged.json || echo "No report files found"
-          npx mochawesome-merge cypress/reports/mochawesome-report/*.json -o cypress/reports/full-report.json || echo "Failed to merge reports, possibly no test results"
+          mkdir -p cypress/reports
+          npx mochawesome-merge cypress/reports/mochawesome-report/*.json > cypress/reports/full-report.json || echo "No JSON files to merge"
 
-      - name: Generate unique identifier
-        id: uniqid
-        run: |
-          echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
-          echo "random=$(openssl rand -hex 4)" >> $GITHUB_OUTPUT
-
+      # 📤 Upload reports, screenshots, and videos
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-results-${{ matrix.environment }}-${{ steps.uniqid.outputs.timestamp }}-${{ steps.uniqid.outputs.random }}
+          name: cypress-results-${{ matrix.environment }}
           path: |
             cypress/reports
             cypress/screenshots
-          retention-days: 30
+            cypress/videos
           if-no-files-found: warn
-          overwrite: true
-
-      - name: Upload bug reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: bug-reports-${{ steps.uniqid.outputs.timestamp }}-${{ steps.uniqid.outputs.random }}
-          path: docs/bug-reports.csv
-          retention-days: 30
-          if-no-files-found: warn
-          overwrite: true

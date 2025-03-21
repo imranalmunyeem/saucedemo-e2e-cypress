@@ -1,14 +1,8 @@
 # 💻 SAUCEDEMO-E2E-CYPRESS
 
-[![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)](https://www.cypress.io/) 
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://js.org/index.html) 
-
-[![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
-[![Mochawesome Reports](https://img.shields.io/badge/Mochawesome%20Reports-<COLOR>?style=for-the-badge&logo=mochawesome&logoColor=white)](https://www.npmjs.com/package/cypress-mochawesome-reporter)
-[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions) 
-
 ## 📑 Table of Contents
 - [Introduction](#introduction)
+- [Tools & Libraries Used](#tools--libraries-used)
 - [Features](features)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
@@ -21,6 +15,36 @@
 ## 📖 Introduction
 This repository contains a Test Automation Framework, built using Cypress and Javascript for automated testing for this site: https://www.saucedemo.com/
 
+## 🛠Tools & Libraries Used
+[![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)](https://www.cypress.io/) 
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://js.org/index.html) 
+
+[![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
+[![Mochawesome Reports](https://img.shields.io/badge/Mochawesome%20Reports-<COLOR>?style=for-the-badge&logo=mochawesome&logoColor=white)](https://www.npmjs.com/package/cypress-mochawesome-reporter)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions) 
+
+| 📦 Library / Tool             | 🔍 Purpose                                                                 |
+|------------------------------|----------------------------------------------------------------------------|
+| 🌐 cypress                   | Core E2E testing framework for web applications.                          |
+| 🧪 cypress-mochawesome-reporter | Generates detailed test reports in HTML/JSON formats.                   |
+| 🗂️ mochawesome-merge          | Merges multiple Mochawesome JSON reports into a single file.              |
+| 📄 cypress.config.js          | Custom test configuration with dynamic environment URLs and setup.        |
+| 📝 e2e.js (support file)      | Global hooks, reporter registration, and command imports.                 |
+| 🧾 cypress.urls.json          | Stores environment-specific base URLs (`prod`, `dev`, etc.).              |
+| 🐞 xlsx                      | Exports failed test details as `.xls` bug reports.                        |
+| 📁 cross-env                 | Passes `ENV=prod/dev` for environment-specific test runs.                 |
+| 🔍 cypress-xpath              | Enables use of XPath selectors in tests.                                  |
+| 🏷️ @cypress/grep             | Filters/group tests using tags or regex patterns.                         |
+| 📺 GitHub Actions             | Automates Cypress test runs with CI/CD pipelines.                         |
+| 📤 actions/upload-artifact    | Uploads reports, screenshots, videos to GitHub as artifacts.              |
+| 🛠️ actions/setup-node, checkout | Sets up Node.js and fetches repository code.                            |
+| 🌐 browserstack-cypress-cli   | (Optional) Runs Cypress tests on BrowserStack cloud browsers.             |
+| 📊 csv                       | Used for generating structured bug reports in `.csv` format.              |
+| 📬 Slack/Email integration    | (Optional) Sends real-time test results to team communication channels.   |
+
+
+<br>
+
 ## 🚀 Key Features
 This Cypress project is designed for robust end-to-end testing, incorporating best practices and advanced features to enhance test automation efficiency.
 - ✅ Page Object Model (POM) – Organized test structure using reusable page classes to improve maintainability.
@@ -29,6 +53,8 @@ This Cypress project is designed for robust end-to-end testing, incorporating be
 - ✅ Advanced Module Integrations:
    - XPath Support – Enables selecting elements using XPath.
    - Cross-Environment Configuration – Allows testing across multiple environments (e.g., production & development) by dynamically setting the base URL.
+   - Integrated browserstack
+   - Used faker.js to load random data dynamically
    - Screenshots & Videos – Automatically captures test evidence for debugging and reporting.
    - Retries on Failures – Configured retries to improve test stability.
    - Test Grouping with Grep – Supports running specific test groups using Cypress grep.
@@ -80,9 +106,12 @@ The tests follow a modular and maintainable structure:
 |          |-- cypress-tests.yml                # GitHub Actions CI/CD workflow
 |-- cypress
 |     |-- e2e
+|          |-- responsiveness
+|                |-- responsivenessTest.spec.js              
 |          |-- SauceDemo
 |                |-- login.spec.js              # Login test cases
 |                |-- product.spec.js            # Product page test cases
+|          |-- Security
 |     |-- fixtures
 |           |-- request-body
 |                |-- login_credentials.json     # Test data

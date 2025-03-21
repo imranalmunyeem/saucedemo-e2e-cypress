@@ -2,7 +2,7 @@
 
 ## 📑 Table of Contents
 - [Introduction](#introduction)
-- [Tools & Libraries Used](#Tools-&-Libraries Used)
+- [Tools & Libraries Used](#tools--libraries-used)
 - [Features](features)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)

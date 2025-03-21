@@ -23,33 +23,25 @@ This repository contains a Test Automation Framework, built using Cypress and Ja
 [![Mochawesome Reports](https://img.shields.io/badge/Mochawesome%20Reports-<COLOR>?style=for-the-badge&logo=mochawesome&logoColor=white)](https://www.npmjs.com/package/cypress-mochawesome-reporter)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions) 
 
-| 📦 Library / Tool              | 🔍 Purpose                                                                 |
-|-------------------------------|----------------------------------------------------------------------------|
-| **🔧 Core Framework & Config** |                                                                            |
-| 🌐 `cypress`                  | End-to-end testing framework for modern web applications.                  |
-| ⚙️ `cypress.config.js`         | Centralised Cypress configuration with dynamic environment handling.       |
-| 🧩 `e2e.js` (support file)     | Loads global setup, commands, and test reporters.                         |
-| 🌍 `cypress.urls.json`         | Stores base URLs for different environments (`prod`, `dev`, etc.).        |
-| 📁 `cross-env`                | Enables use of environment variables in scripts (`ENV=prod/dev`).         |
+| 📦 Library / Tool             | 🔍 Purpose                                                                 |
+|------------------------------|----------------------------------------------------------------------------|
+| 🌐 cypress                   | Core E2E testing framework for web applications.                          |
+| 🧪 cypress-mochawesome-reporter | Generates detailed test reports in HTML/JSON formats.                   |
+| 🗂️ mochawesome-merge          | Merges multiple Mochawesome JSON reports into a single file.              |
+| 📄 cypress.config.js          | Custom test configuration with dynamic environment URLs and setup.        |
+| 📝 e2e.js (support file)      | Global hooks, reporter registration, and command imports.                 |
+| 🧾 cypress.urls.json          | Stores environment-specific base URLs (`prod`, `dev`, etc.).              |
+| 🐞 xlsx                      | Exports failed test details as `.xls` bug reports.                        |
+| 📁 cross-env                 | Passes `ENV=prod/dev` for environment-specific test runs.                 |
+| 🔍 cypress-xpath              | Enables use of XPath selectors in tests.                                  |
+| 🏷️ @cypress/grep             | Filters/group tests using tags or regex patterns.                         |
+| 📺 GitHub Actions             | Automates Cypress test runs with CI/CD pipelines.                         |
+| 📤 actions/upload-artifact    | Uploads reports, screenshots, videos to GitHub as artifacts.              |
+| 🛠️ actions/setup-node, checkout | Sets up Node.js and fetches repository code.                            |
+| 🌐 browserstack-cypress-cli   | (Optional) Runs Cypress tests on BrowserStack cloud browsers.             |
+| 📊 csv                       | Used for generating structured bug reports in `.csv` format.              |
+| 📬 Slack/Email integration    | (Optional) Sends real-time test results to team communication channels.   |
 
-| **🧪 Test Enhancement & Utilities** |                                                                        |
-| 🔍 `cypress-xpath`             | Adds XPath selector support in Cypress tests.                            |
-| 🏷️ `@cypress/grep`             | Enables test filtering using tags or grep expressions.                   |
-| 📄 `xlsx`                     | Writes failed test information to `.xls` bug reports.                    |
-| 📊 `csv`                      | (Optional) Saves structured bug or test result data in `.csv` format.     |
-
-| **📋 Reporting & Artifacts**    |                                                                            |
-| 🧾 `cypress-mochawesome-reporter` | Generates rich HTML/JSON test reports with screenshots/videos.          |
-| 📂 `mochawesome-merge`         | Merges multiple test JSON reports into one combined file.                |
-
-| **🚀 CI/CD Integration**       |                                                                            |
-| 🛠️ `GitHub Actions`            | Runs automated Cypress tests on push, PR, or schedule.                    |
-| 📤 `actions/upload-artifact`   | Uploads test reports, screenshots, and videos to GitHub.                 |
-| 🔧 `actions/setup-node` & `checkout` | Sets up Node and checks out project code.                            |
-
-| **☁️ Optional Integrations**   |                                                                            |
-| 🌐 `browserstack-cypress-cli`  | Executes tests on real browsers via BrowserStack cloud grid.             |
-| 📬 Slack/Email Notifications   | Sends real-time test results to teams (manual integration).               |
 
 <br>
 

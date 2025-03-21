@@ -1,7 +1,7 @@
 ///<reference types = 'cypress'/>
 
-describe('Security Test - Brute Force Login',{ tags: ['security'] },()=>{
-    it('Should lock account after multiple failed login attempts',()=>{
+describe('Security Test - Brute Force Login',{tags:['security']},()=>{
+    it('Should lock account after multiple failed login attempts',{tags:['security']},()=>{
         for(let i=0; i<10; i++){
             cy.visitBaseUrl();
             cy.get('[data-test="username"]').type('standard_user');

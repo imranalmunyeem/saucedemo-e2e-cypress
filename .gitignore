@@ -19,3 +19,4 @@ cypress.env.json
 .env.test
 cypress.env.json
 cypress.urls.json
+browserstack.json

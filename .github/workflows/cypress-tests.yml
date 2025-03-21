@@ -1,38 +1,39 @@
-name: 🧪 Scheduled Cypress E2E Tests
+name: 🧪 Scheduled & Manual Cypress E2E Tests
 
-# ⏰ Schedule: Mon–Fri at 12:00 UTC
+# 🚀 Triggers: Manual & Scheduled (Mon–Fri at 12:00 UTC)
 on:
   schedule:
-    - cron: "0 12 * * 1-5"
+    - cron: "0 12 * * 1-5"  # Mon–Fri at 12:00 UTC
+  workflow_dispatch:        # Manual trigger from GitHub Actions UI
 
 jobs:
   run-cypress-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [prod]
+        environment: [prod] 
 
     steps:
-      # 📦 Checkout code
+      # 📦 Checkout source code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🛠 Setup Node.js
+      # 🛠 Set up Node.js with npm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      # 📥 Install dependencies
+      # 📥 Install project dependencies
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # 🌍 Set ENV for dynamic baseUrl in config
+      # 🌍 Set ENV variable for dynamic baseUrl
       - name: Set environment
         run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # 🧪 Run Cypress tests
+      # 🧪 Run Cypress E2E tests
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:

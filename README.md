@@ -11,7 +11,7 @@
 - [Configuration](#configuration)
 - [Continuous Integration](#-continuous-integration)
 - [Reporting](#reporting)
-- [Scripts] (#scripts)
+- [Scripts] (#-cypress-custom-scripts)
 
 ## 📖 Introduction
 This repository contains a Test Automation Framework, built using Cypress and Javascript for automated testing for this site: https://www.saucedemo.com/
@@ -200,6 +200,7 @@ Each job logs metadata about the trigger in the GitHub summary, including:
 ## 📊 Reporting
 
 Mochawesome report (Logs are attached) is stored in the `cypress/reports` directory.
+<br>
 
 
 ## 📜 Cypress Custom Scripts 

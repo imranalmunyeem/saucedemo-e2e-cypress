@@ -9,7 +9,7 @@
 - [Running Tests](#running-tests)
 - [Project Structure](#project-structure)
 - [Configuration](#configuration)
-- [Continuous Integration](#continuous-integration)
+- [Continuous Integration](#-continuous-integration)
 - [Reporting](#reporting)
 
 ## 📖 Introduction
@@ -30,7 +30,7 @@ This repository contains a Test Automation Framework, built using Cypress and Ja
 | 🗂️ mochawesome-merge          | Merges multiple Mochawesome JSON reports into a single file.              |
 | 📄 cypress.config.js          | Custom test configuration with dynamic environment URLs and setup.        |
 | 📝 e2e.js (support file)      | Global hooks, reporter registration, and command imports.                 |
-| 📝 cypress.on (event listener)| To listen to the status of the test case whether passed or failed         !       |
+| 📝 cypress.on (event listener)| To listen to the status of the test case whether passed or failed         |
 | 🧾 cypress.urls.json          | Stores environment-specific base URLs (`prod`, `dev`, etc.).              |
 | 🐞 xlsx                      | Exports failed test details as `.xls` bug reports.                        |
 | 📁 cross-env                 | Passes `ENV=prod/dev` for environment-specific test runs.                 |
@@ -146,7 +146,53 @@ The tests follow a modular and maintainable structure:
 
 ## 🔄 Continuous Integration
 
-This project is configured for CI using Github Actions. Check the configurations in `.github/workflows/*.yml`.
+##### This project uses GitHub Actions to run **Cypress E2E test suites** in parallel for:
+| 🧪 Test Type         | 🔍 Purpose & Scope                                                           |
+|----------------------|-----------------------------------------------------------------------------|
+| 🧪 Integration Tests | Validates functional flows and UI behavior (e.g., login, cart, checkout)    |
+| 🛡️ Security Tests     | Checks for vulnerabilities like brute force, XSS, SQL injection, etc.       |
+| 🚀 Performance Tests  | Verifies response time, speed under load, and performance regressions       |
+| 📱 Responsive Tests   | Ensures layout and elements render correctly across multiple screen sizes   |
+
+
+##### 🚀 Workflow Triggers
+
+##### The test workflow is automatically triggered:
+
+- ✅ **Daily (Monday to Friday)** at **12:00 UTC**
+- ✅ **Manually** from the GitHub Actions tab via `workflow_dispatch`
+
+⚙️ What Each Job Does
+Each job (e.g. integration-tests) performs the following steps:
+
+| 🛠️ Step                                | 🔍 Purpose                                                                 |
+|----------------------------------------|----------------------------------------------------------------------------|
+| 🧾 Checkout Code                        | Clones your GitHub repository using `actions/checkout`                    |
+| 🧰 Setup Node.js                        | Installs Node.js v18 and caches `npm` dependencies for faster builds      |
+| 📦 Install Dependencies                 | Uses `npm ci --legacy-peer-deps` to install exact dependencies            |
+| 🌐 Set ENV Variable                     | Sets the `ENV=prod` variable to load environment-specific base URL        |
+| 🧪 Run Cypress Tests                    | Executes tests from a specific folder (e.g., `integration`, `security`)   |
+| 📄 Rename Mochawesome Report           | Renames dynamic report like `index.html_03252025_123456.html` to `index.html` |
+| 📤 Upload Mochawesome HTML Report       | Publishes the report as an artifact for easy download from GitHub Actions |
+
+
+##### You can find the workflow file here:
+```bash
+.github/workflows/*.yml
+```
+
+##### 🔔 Trigger Metadata
+Each job logs metadata about the trigger in the GitHub summary, including:
+
+| 🧩 Metadata Field     | 🔍 Description                                             |
+|-----------------------|------------------------------------------------------------|
+| 👤 Triggered By        | Shows the GitHub username who triggered the workflow       |
+| 🕹️ Event Type          | Indicates whether the run was manual or scheduled (CRON)   |
+| 🌿 Branch Name         | Displays the branch name from which the workflow was run   |
+| 🆔 Run ID              | Unique GitHub Actions run identifier for tracking purposes |
+
+
+
 
 ## 📊 Reporting
 

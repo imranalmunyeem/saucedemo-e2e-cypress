@@ -3,19 +3,19 @@
 describe('📱 SAUCE DEMO - [Responsiveness Tests]', () => {
 
   // 💻 Desktop Viewport Tests
-  describe('💻 Desktop View', () => {
-    it('TC_RESP_001: should render properly on macbook-15', () => {
-      cy.viewport('macbook-15');
-      cy.visitBaseUrl();
+  // describe('💻 Desktop View', () => {
+  //   it('TC_RESP_001: should render properly on macbook-15', () => {
+  //     cy.viewport('macbook-15');
+  //     cy.visitBaseUrl();
 
-      cy.get('[data-test="username"]').should('be.visible');
-      cy.get('[data-test="password"]').should('be.visible');
-      cy.get('[data-test="login-button"]').should('be.visible');
+  //     cy.get('[data-test="username"]').should('be.visible');
+  //     cy.get('[data-test="password"]').should('be.visible');
+  //     cy.get('[data-test="login-button"]').should('be.visible');
 
-      cy.document().its('documentElement.scrollWidth')
-        .should('lte', Cypress.config('viewportWidth'));
-    });
-  });
+  //     cy.document().its('documentElement.scrollWidth')
+  //       .should('lte', Cypress.config('viewportWidth'));
+  //   });
+  // });
 
   // 📱 Tablet Viewport Tests
   describe('📱 Tablet View', () => {

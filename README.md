@@ -162,7 +162,7 @@ The tests follow a modular and maintainable structure:
 ⚙️ What Each Job Does
 Each job (e.g. integration-tests) performs the following steps:
 
-🧾 Checks out the repo
+----🧾 Checks out the repo
 
 🧰 Sets up Node.js 18 with caching
 
@@ -179,6 +179,7 @@ Each job (e.g. integration-tests) performs the following steps:
 ##### You can find the workflow file here:
 ```bash
 .github/workflows/*.yml
+```
 
 🔔 Trigger Metadata
 Each job logs metadata about the trigger in the GitHub summary, including:

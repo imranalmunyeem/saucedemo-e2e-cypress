@@ -5,18 +5,66 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test:headed": "npx cypress run --headed --spec cypress/e2e/SauceDemo/*.cy.js",
+
     "test:gui": "npx cypress open",
-    "test:record": "npx cypress run --record --spec cypress/e2e/SauceDemo/*.cy.js",
-    "test:chrome": "npx cypress run --browser chrome --spec cypress/e2e/SauceDemo/*.cy.js",
-    "test:firefox": "npx cypress run --browser firefox --spec cypress/e2e/SauceDemo/*.cy.js",
-    "test:edge": "npx cypress run --browser edge --spec cypress/e2e/SauceDemo/*.cy.js",
-    "test:dev": "cross-env ENV=dev npx cypress run --spec cypress/e2e/SauceDemo/*.cy.js",
-    "test:prod": "cross-env ENV=prod npx cypress run --spec cypress/e2e/SauceDemo/*.cy.js",
-    "test:report": "npx cypress run --reporter mochawesome --spec cypress/e2e/SauceDemo/*.cy.js",
+
+    "test:chrome:headless": "npx cypress run --browser chrome --headless",
+    "test:chrome:headed": "npx cypress run --browser chrome --headed",
+
+    "test:firefox:headless": "npx cypress run --browser firefox --headless",
+    "test:firefox:headed": "npx cypress run --browser firefox --headed",
+
+    "test:edge:headless": "npx cypress run --browser edge --headless",
+    "test:edge:headed": "npx cypress run --browser edge --headed",
+
+    "test:dev": "cross-env ENV=dev npx cypress run --spec cypress/e2e/**/*.spec.js",
+    "test:prod": "cross-env ENV=prod npx cypress run --spec cypress/e2e/**/*.spec.js",
+
+    "test:report": "npx cypress run --reporter mochawesome --spec cypress/e2e/**/*.spec.js",
     "merge:report": "node merge-reports.js",
     "test:full-report": "npm run test:report && npm run merge:report",
-    "security-tests": "npx cypress run --spec 'cypress/e2e/security/*.cy.js'"
+    "clean:reports": "rimraf cypress/reports mochawesome-report cypress/screenshots cypress/videos",
+
+    "ci:test": "npm run clean:reports && npm run test:full-report",
+
+    "integration:electron:headless": "npx cypress run --browser electron --headless --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:electron:headed": "npx cypress run --browser electron --headed --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:chrome:headless": "npx cypress run --browser chrome --headless --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:chrome:headed": "npx cypress run --browser chrome --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:firefox:headless": "npx cypress run --browser firefox --headless --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:firefox:headed": "npx cypress run --browser firefox --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:edge:headless": "npx cypress run --browser edge --headless --spec 'cypress/e2e/integration/*.spec.js'",
+    "integration:edge:headed": "npx cypress run --browser edge --spec 'cypress/e2e/integration/*.spec.js'",
+
+
+    "security:electron:headless": "npx cypress run --browser electron --headless --spec 'cypress/e2e/security/*.spec.js'",
+    "security:electron:headed": "npx cypress run --browser electron --headed --spec 'cypress/e2e/security/*.spec.js'",
+    "security:chrome:headless": "npx cypress run --browser chrome --headless --spec 'cypress/e2e/security/*.spec.js'",
+    "security:chrome:headed": "npx cypress run --browser chrome --spec 'cypress/e2e/security/*.spec.js'",
+    "security:firefox:headless": "npx cypress run --browser firefox --headless --spec 'cypress/e2e/security/*.spec.js'",
+    "security:firefox:headed": "npx cypress run --browser firefox --spec 'cypress/e2e/security/*.spec.js'",
+    "security:edge:headless": "npx cypress run --browser edge --headless --spec 'cypress/e2e/security/*.spec.js'",
+    "security:edge:headed": "npx cypress run --browser edge --spec 'cypress/e2e/security/*.spec.js'",  
+
+
+    "performance:electron:headless": "npx cypress run --browser electron --headless --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:electron:headed": "npx cypress run --browser electron --headed --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:chrome:headless": "npx cypress run --browser chrome --headless --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:chrome:headed": "npx cypress run --browser chrome --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:firefox:headless": "npx cypress run --browser firefox --headless --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:firefox:headed": "npx cypress run --browser firefox --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:edge:headless": "npx cypress run --browser edge --headless --spec 'cypress/e2e/performance/*.spec.js'",
+    "performance:edge:headed": "npx cypress run --browser edge --spec 'cypress/e2e/performance/*.spec.js'",
+
+
+    "responsive:electron:headless": "npx cypress run --browser electron --headless --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:electron:headed": "npx cypress run --browser electron --headed --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:chrome:headless": "npx cypress run --browser chrome --headless --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:chrome:headed": "npx cypress run --browser chrome --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:firefox:headless": "npx cypress run --browser firefox --headless --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:firefox:headed": "npx cypress run --browser firefox --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:edge:headless": "npx cypress run --browser edge --headless --spec 'cypress/e2e/responsive/*.spec.js'",
+    "responsive:edge:headed": "npx cypress run --browser edge --spec 'cypress/e2e/responsive/*.spec.js'"   
   },
   "keywords": [],
   "author": "",
@@ -33,6 +81,7 @@
     "cypress-xpath": "^2.0.1",
     "fs": "^0.0.1-security",
     "mochawesome-merge": "^5.0.0",
+    "npm-run-all": "^4.1.5",
     "vite": "^6.2.2",
     "xlsx": "^0.18.5"
   },

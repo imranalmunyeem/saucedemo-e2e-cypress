@@ -11,6 +11,9 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
 
     afterEach('Run after each test',()=>{
         cy.logout()
+        cy.clearAllCookies();
+        cy.clearAllLocalStorage();
+        cy.clearAllSessionStorage();
         cy.log('--- Test Execution Completed ---');
         cy.log('Status: ✅ Passed');
     })
@@ -92,17 +95,8 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
         ];
       
         // Add each product to cart
-        products.forEach((product) => {
-          cy.get(`[data-test="add-to-cart-${product}"]`).click();
-        });
-      
-        // Assert cart shows correct number
-        cy.get('.shopping_cart_badge').should('have.text', products.length.toString());
-      
-        // Assert remove buttons exist
-        products.forEach((product) => {
-          cy.get(`[data-test="remove-${product}"]`).should('exist');
-        });
+        ProductPage.addProductsToCart(products)
+        ProductPage.verifyCartItemCount('3');
       
       });
 
@@ -114,14 +108,11 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
           'sauce-labs-bike-light',
           'sauce-labs-bolt-t-shirt'
         ];
-      
-        // Now remove each item
-        products.forEach((product) => {
-          cy.get(`[data-test="remove-${product}"]`).click();
-        });
-      
-        // Confirm cart badge no longer exists (empty cart)
-        cy.get('.shopping_cart_badge').should('not.exist');
+        
+        // Add each product to cart
+        ProductPage.addProductsToCart(products);
+        ProductPage.removeProductsFromCart(products);
+        ProductPage.verifyCartIsEmpty();
       
       });
 
@@ -133,27 +124,12 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
           'sauce-labs-bike-light',
           'sauce-labs-bolt-t-shirt'
         ];
-      
-        // Add each product to cart
-        products.forEach((product) => {
-          cy.get(`[data-test="add-to-cart-${product}"]`).click();
-        });
 
-        cy.get('[data-test="shopping-cart-link"]').click();
-      
-        // Click on checkout
-        cy.get('[data-test="checkout"]').click();
-
-        //Input user details
-        cy.get('[data-test="firstName"]').type('Tester')
-        cy.get('[data-test="lastName"]').type('testerlastname')
-        cy.get('[data-test="postalCode"]').type('testpostcode')
-
-        cy.get('[data-test="continue"]').click()
-
-        cy.get('[data-test="finish"]').click()
-
-        cy.get('[data-test="complete-header"]').should('contain.text', 'Thank you for your order!')
+        ProductPage.addProductsToCart(products);
+        ProductPage.goToCart();
+        ProductPage.startCheckout('testfname','testlname','testcode')
+        ProductPage.completeOrder();
+        ProductPage.verifyOrderSuccessMessage();
       });
     })
 })

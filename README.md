@@ -146,7 +146,52 @@ The tests follow a modular and maintainable structure:
 
 ## 🔄 Continuous Integration
 
-This project is configured for CI using Github Actions. Check the configurations in `.github/workflows/*.yml`.
+##### This project uses GitHub Actions to run **Cypress E2E test suites** in parallel for:
+- 🧪 Integration Tests
+- 🛡️ Security Tests
+- 🚀 Performance Tests
+- 📱 Responsive Tests
+
+##### 🚀 Workflow Triggers
+
+##### The test workflow is automatically triggered:
+
+- ✅ **Daily (Monday to Friday)** at **12:00 UTC**
+- ✅ **Manually** from the GitHub Actions tab via `workflow_dispatch`
+
+⚙️ What Each Job Does
+Each job (e.g. integration-tests) performs the following steps:
+
+🧾 Checks out the repo
+
+🧰 Sets up Node.js 18 with caching
+
+📦 Installs dependencies with npm ci --legacy-peer-deps
+
+🌐 Sets the ENV=prod environment variable
+
+🧪 Runs Cypress tests for its specific folder
+
+📄 Renames the dynamic Mochawesome HTML report to index.html
+
+📤 Uploads the HTML report as a downloadable artifact
+
+##### You can find the workflow file here:
+```bash
+.github/workflows/*.yml
+
+🔔 Trigger Metadata
+Each job logs metadata about the trigger in the GitHub summary, including:
+
+Who triggered the run
+
+Event type (manual/schedule)
+
+Branch name
+
+Run ID
+
+
 
 ## 📊 Reporting
 

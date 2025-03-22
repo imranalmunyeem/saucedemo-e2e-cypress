@@ -2,7 +2,7 @@
 
 import ProductPage from "../../support/pages/ProductPage";
 
-describe('Sauce Demo - [Product Module] - 📦', ()=>{
+describe('SAUCE DEMO - [Product Module] - 📦', ()=>{
 
     beforeEach('Run befor each test',()=>{
         cy.visitBaseUrl();
@@ -16,8 +16,9 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
         cy.clearAllSessionStorage();
         cy.logTestStatus();
     })
-
-    describe('🧪 Page Load and Description - [Product Module]', ()=>{
+    
+    // ----------------   PAGE AND PRODUCT  ---------------------
+    describe('🧪 Page Load and Description - [Page & Product]', ()=>{
       it('TC001: Product page url verification',()=>{
         cy.url().should('contain', '/inventory');        
       })
@@ -34,7 +35,8 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
       });
     })
 
-    describe('🔃 Sorting Features - [Product Module]',()=>{
+    // ----------------   SORTING  ---------------------
+    describe('🔃 Sorting Features - [Product Sorting]',()=>{
       it('TC004: Prices are sorted high to low', () => {
         ProductPage.selectSortOption('hilo');
         ProductPage.verifyPricesSorted('desc');
@@ -82,8 +84,8 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
     //     cy.get('.shopping_cart_badge').should('not.exist');
     //   });
     
-
-    describe('🛒 Cart Operations - [Product Module]',()=>{
+    // ----------------   Cart Operations  ---------------------
+    describe('🛒 Cart Operations - [Product Purchase & Remove]',()=>{
       it('TC008: Adds 3 items to the cart dynamically', () => {
      
         // Define products

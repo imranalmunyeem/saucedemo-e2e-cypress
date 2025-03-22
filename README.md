@@ -9,7 +9,7 @@
 - [Running Tests](#running-tests)
 - [Project Structure](#project-structure)
 - [Configuration](#configuration)
-- [Continuous Integration](#continuous-integration)
+- [Continuous Integration](#-continuous-integration)
 - [Reporting](#reporting)
 
 ## 📖 Introduction

@@ -181,16 +181,16 @@ Each job (e.g. integration-tests) performs the following steps:
 .github/workflows/*.yml
 ```
 
-🔔 Trigger Metadata
+##### 🔔 Trigger Metadata
 Each job logs metadata about the trigger in the GitHub summary, including:
 
-Who triggered the run
+| 🧩 Metadata Field     | 🔍 Description                                             |
+|-----------------------|------------------------------------------------------------|
+| 👤 Triggered By        | Shows the GitHub username who triggered the workflow       |
+| 🕹️ Event Type          | Indicates whether the run was manual or scheduled (CRON)   |
+| 🌿 Branch Name         | Displays the branch name from which the workflow was run   |
+| 🆔 Run ID              | Unique GitHub Actions run identifier for tracking purposes |
 
-Event type (manual/schedule)
-
-Branch name
-
-Run ID
 
 
 

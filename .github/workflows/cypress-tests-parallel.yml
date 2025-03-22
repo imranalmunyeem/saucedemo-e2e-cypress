@@ -4,7 +4,9 @@ name: 🧪 SAUCEDEMO - E2E
 on:
   schedule:
     - cron: "0 12 * * 1-5"
-  workflow_dispatch:
+  workflow_dispatch:       # Manual trigger
+  push:                    # Trigger on push to any branch
+  pull_request:            # Trigger on pull request to any branch
 
 # 🔁 Common test matrix for all jobs
 defaults:

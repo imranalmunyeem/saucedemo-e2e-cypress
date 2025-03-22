@@ -106,13 +106,18 @@ The tests follow a modular and maintainable structure:
 |     |-- workflows
 |          |-- cypress-tests.yml                # GitHub Actions CI/CD workflow
 |-- cypress
+|     |-- component
+|          |-- LoginForm.spec.jsx
 |     |-- e2e
+|          |-- performance
+|                |-- performanceTest.spec.js    
 |          |-- responsiveness
 |                |-- responsivenessTest.spec.js              
-|          |-- SauceDemo
+|          |-- integration
 |                |-- login.spec.js              # Login test cases
 |                |-- product.spec.js            # Product page test cases
 |          |-- Security
+|                |-- securityTest.spec.js    
 |     |-- fixtures
 |           |-- request-body
 |                |-- login_credentials.json     # Test data

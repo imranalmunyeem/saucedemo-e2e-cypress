@@ -68,10 +68,20 @@ module.exports = defineConfig({
     },
 
     // Set the pattern to match the actual test files in SauceDemo folder
-    specPattern: ['cypress/e2e/integration/*.cy.js','cypress/e2e/security/*.spec.js','cypress/e2e/integration/*.spec.js','cypress/e2e/responsive/*.spec.js'],
+    specPattern: ['cypress/e2e/integration/*.spec.js','cypress/e2e/security/*.spec.js','cypress/e2e/performance/*.spec.js','cypress/e2e/responsive/*.spec.js'],
     excludeSpecPattern: ['cypress/e2e/examples/*.js', 'cypress/e2e/examples/*.ts'],
 
     // Optional: Set the default timeout for commands and assertions
     defaultCommandTimeout: 10000,
   },
+
+  component: {
+    devServer: {
+      framework: 'react',
+      bundler: 'vite'
+    },
+    specPattern: 'cypress/component/*.spec.{js,jsx,ts,tsx}',
+    supportFile: 'cypress/support/component.js'
+  }
+
 });

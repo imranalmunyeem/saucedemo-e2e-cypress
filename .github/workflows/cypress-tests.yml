@@ -1,74 +1,171 @@
-name: 🧪 Saucedemo-(Cypress E2E Tests)
+name: 🧪 Saucedemo - Cypress E2E Tests (Parallel)
 
-# 🚀 Triggers: Manual & Scheduled (Mon–Fri at 12:00 UTC)
+# 🚀 Triggers: Scheduled (Mon–Fri at 12:00 UTC) & Manual
 on:
   schedule:
-    - cron: "0 12 * * 1-5"  # Mon–Fri at 12:00 UTC
-  workflow_dispatch:        # Manual trigger from GitHub Actions UI
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch:
 
+# 🔁 Common test matrix for all jobs
+defaults:
+  run:
+    shell: bash
+
+# 🧪 Integration Test Job
 jobs:
-  run-cypress-tests:
+  integration-tests:
+    name: 🧪 Integration Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [prod] 
-
+        environment: [prod]
     steps:
-      # 📦 Checkout source code
-      - name: Checkout code
+      - name: 📦 Checkout code
         uses: actions/checkout@v4
 
-      # 🛠 Set up Node.js with npm cache
-      - name: Setup Node.js
+      - name: 🛠 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      # 📥 Install project dependencies
-      - name: Install dependencies
+      - name: 📥 Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # 🌍 Set ENV variable for dynamic baseUrl
-      - name: Set environment
+      - name: 🌍 Set test environment
         run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # 🧪 Run Cypress E2E tests
-      - name: Run Cypress tests
+      - name: 🧪 Run Cypress Integration Specs
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          headed: false
+          spec: cypress/e2e/integration/**/*.cy.js
         env:
           ENV: ${{ matrix.environment }}
 
-      # 📄 Rename dynamic Mochawesome report to static name
+      - name: 📄 Rename Mochawesome report to static name
+        if: always()
+        run: |
+          REPORT=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
+          if [ -f "$REPORT" ]; then
+            cp "$REPORT" cypress/reports/mochawesome-report/index.html
+          fi
+
+      - name: 📤 Upload Mochawesome Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-report
+          path: cypress/reports/mochawesome-report/index.html
+          if-no-files-found: warn
+
+# 🚀 Performance Test Job
+  performance-tests:
+    name: 🚀 Performance Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [prod]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
+      - name: Run Performance Specs
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          spec: cypress/e2e/performance/**/*.spec.js
+        env:
+          ENV: ${{ matrix.environment }}
       - name: Rename Mochawesome HTML report
         if: always()
         run: |
           REPORT=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
           if [ -f "$REPORT" ]; then
             cp "$REPORT" cypress/reports/mochawesome-report/index.html
-            echo "✅ HTML report renamed to index.html"
-          else
-            echo "⚠️ No HTML report found to rename"
           fi
-
-      # 📤 Upload the renamed Mochawesome HTML report
-      - name: Upload HTML Report
+      - name: Upload Performance Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mochawesome-report-${{ matrix.environment }}
+          name: performance-report
           path: cypress/reports/mochawesome-report/index.html
           if-no-files-found: warn
 
-      # ✅ Log who triggered the workflow
-      - name: ✍️ Log Trigger Info
+# 🛡️ Security Test Job
+  security-tests:
+    name: 🛡️ Security Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [prod]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
+      - name: Run Security Specs
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          spec: cypress/e2e/security/**/*.spec.js
+        env:
+          ENV: ${{ matrix.environment }}
+      - name: Rename Mochawesome HTML report
+        if: always()
         run: |
-          echo "### 🔔 Trigger Info" >> $GITHUB_STEP_SUMMARY
-          echo "- **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Event**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-            
+          REPORT=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
+          if [ -f "$REPORT" ]; then
+            cp "$REPORT" cypress/reports/mochawesome-report/index.html
+          fi
+      - name: Upload Security Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: cypress/reports/mochawesome-report/index.html
+          if-no-files-found: warn
+
+# 📱 Responsive Test Job
+  responsive-tests:
+    name: 📱 Responsive Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [prod]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: echo "ENV=${{ matrix.environment }}" >> $GITHUB_ENV
+      - name: Run Responsive Specs
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          spec: cypress/e2e/responsive/**/*.spec.js
+        env:
+          ENV: ${{ matrix.environment }}
+      - name: Rename Mochawesome HTML report
+        if: always()
+        run: |
+          REPORT=$(find cypress/reports/mochawesome-report -name "index.html_*.html" | sort | tail -n 1)
+          if [ -f "$REPORT" ]; then
+            cp "$REPORT" cypress/reports/mochawesome-report/index.html
+          fi
+      - name: Upload Responsive Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-report
+          path: cypress/reports/mochawesome-report/index.html
+          if-no-files-found: warn

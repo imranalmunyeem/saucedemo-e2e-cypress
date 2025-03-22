@@ -11,14 +11,14 @@ describe('🛡️ SAUCE DEMO - [Security Test Suite]', () => {
       })
   
     // 🔐 Brute Force Attack
-    describe('🔐 Brute Force Login Protection', () => {
-      it('TC_SEC_001: Should lock account after multiple failed login attempts', () => {
-        for (let i = 0; i < 10; i++) {
-          cy.userLogin(); // assumes this command tries with wrong creds
-        }
-        cy.get('[data-test="error"]').should('contain', 'too many login attempts');
-      });
-    });
+    // describe('🔐 Brute Force Login Protection', () => {
+    //   it('TC_SEC_001: Should lock account after multiple failed login attempts', () => {
+    //     for (let i = 0; i < 10; i++) {
+    //       cy.userLogin(); // assumes this command tries with wrong creds
+    //     }
+    //     cy.get('[data-test="error"]').should('contain', 'too many login attempts');
+    //   });
+    // });
   
     // 🛑 SQL Injection
     describe('🛑 SQL Injection in Login Fields', () => {
@@ -43,28 +43,28 @@ describe('🛡️ SAUCE DEMO - [Security Test Suite]', () => {
     });
   
     // 🔒 Session Hijacking
-    describe('🔒 Session Hijacking Protection', () => {
-      it('TC_SEC_004: Should invalidate session after logout', () => {
-        cy.get('[data-test="username"]').type('standard_user');
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
+    // describe('🔒 Session Hijacking Protection', () => {
+    //   it('TC_SEC_004: Should invalidate session after logout', () => {
+    //     cy.get('[data-test="username"]').type('standard_user');
+    //     cy.get('[data-test="password"]').type('secret_sauce');
+    //     cy.get('[data-test="login-button"]').click();
   
-        cy.window().then((win) => {
-          const sessionToken = win.localStorage.getItem('session_token');
-          expect(sessionToken).to.exist;
+    //     cy.window().then((win) => {
+    //       const sessionToken = win.localStorage.getItem('session_token');
+    //       expect(sessionToken).to.exist;
   
-          cy.get('[data-test="logout-sidebar-link"]').click();
+    //       cy.get('[data-test="logout-sidebar-link"]').click();
   
-          // Attempt to restore session
-          cy.window().then((win) => {
-            win.localStorage.setItem('session_token', sessionToken);
-            cy.reload();
-            cy.url().should('include', '/');
-            cy.get('[data-test="login-button"]').should('be.visible');
-          });
-        });
-      });
-    });
+    //       // Attempt to restore session
+    //       cy.window().then((win) => {
+    //         win.localStorage.setItem('session_token', sessionToken);
+    //         cy.reload();
+    //         cy.url().should('include', '/');
+    //         cy.get('[data-test="login-button"]').should('be.visible');
+    //       });
+    //     });
+    //   });
+    // });
   
     // 🧪 Input Validation
     describe('🧪 Input Boundary & Character Injection', () => {

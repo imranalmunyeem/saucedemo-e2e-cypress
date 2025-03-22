@@ -161,6 +161,8 @@ The tests follow a modular and maintainable structure:
 
 - ✅ **Daily (Monday to Friday)** at **12:00 UTC**
 - ✅ **Manually** from the GitHub Actions tab via `workflow_dispatch`
+- ✅ Trigger on push to any branch
+- ✅ Trigger on pull request to any branch
 
 ⚙️ What Each Job Does
 Each job (e.g. integration-tests) performs the following steps:

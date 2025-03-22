@@ -49,7 +49,7 @@ This repository contains a Test Automation Framework, built using Cypress and Ja
 This Cypress project is designed for robust end-to-end testing, incorporating best practices and advanced features to enhance test automation efficiency.
 - ✅ Page Object Model (POM) – Organized test structure using reusable page classes to improve maintainability.
 - ✅ Data-Driven Testing – Uses external test data for login credentials and other scenarios, ensuring flexibility and scalability.
-- ✅ Custom Commands – Encapsulates frequently used actions like login to reduce redundancy and improve readability.
+- ✅ Custom Commands – Added custom log messages to indicate pass or fail status, login, logout
 - ✅ Advanced Module Integrations:
    - XPath Support – Enables selecting elements using XPath.
    - Cross-Environment Configuration – Allows testing across multiple environments (e.g., production & development) by dynamically setting the base URL.

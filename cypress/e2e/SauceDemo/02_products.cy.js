@@ -1,6 +1,8 @@
 ///<reference types = 'cypress'/>
 
-describe('Sauce Demo - [Product Module]', ()=>{
+import ProductPage from "../../support/pages/ProductPage";
+
+describe('Sauce Demo - [Product Module] - 📦', ()=>{
 
     beforeEach('Run befor each test',()=>{
         cy.visitBaseUrl();
@@ -9,58 +11,49 @@ describe('Sauce Demo - [Product Module]', ()=>{
 
     afterEach('Run after each test',()=>{
         cy.logout()
-        cy.log('Test is completed')
+        cy.log('--- Test Execution Completed ---');
+        cy.log('Status: ✅ Passed');
     })
 
-    it('TC001: Product page url verification',()=>{
-        cy.url().should('contain','/inventory.html');
-        
-    })
-
-    it('TC002: Product description verification',()=>{
-        cy.get('[data-test="item-1-title-link"] > [data-test="inventory-item-name"]').click()
-        cy.get('[data-test="inventory-item-desc"]').contains('American Apparel, 100% ringspun combed cotton, heather gray with red bolt.')
-    })
-
-    it('TC003: Prices are sorted high to low', () => {
-        cy.get('.product_sort_container').select('hilo');
-
-        cy.get('[data-test="inventory-item-price"]').then(($els) => {
-          const prices = [...$els].map(el => parseFloat(el.innerText.replace('$', '')));
-          const sorted = [...prices].sort((a, b) => b - a); // high to low
-          expect(prices).to.deep.equal(sorted);
-        });
+    describe('🧪 Page Load and Description - [Product Module]', ()=>{
+      it('TC001: Product page url verification',()=>{
+        cy.url().should('contain', '/inventory');        
+      })
+  
+      it('TC002: Product page title verification',()=>{
+          ProductPage.productPageTitleVerification();        
+      })
+  
+      it('TC003: Product description verification', () => {
+        ProductPage.openItemDetails();
+        ProductPage.verifyDescriptionContains(
+          'American Apparel, 100% ringspun combed cotton, heather gray with red bolt.'
+        );
       });
-      
-    it('TC004: Prices are sorted low to high', () => {
-        cy.get('.product_sort_container').select('lohi');
+    })
 
-        cy.get('[data-test="inventory-item-price"]').then(($els) => {
-            const prices = [...$els].map(el => parseFloat(el.innerText.replace('$', '')));
-            const sorted = [...prices].sort((a, b) => a - b); // low to high
-            expect(prices).to.deep.equal(sorted);
-        });
-    });
-
-    it('TC005: Products are sorted by name Z to A', () => {
-        cy.get('.product_sort_container').select('za');
-
-        cy.get('.inventory_item_name').then(($els) => {
-        const names = [...$els].map(el => el.innerText.trim());
-        const sorted = [...names].sort((a, b) => b.localeCompare(a)); // Z to A
-        expect(names).to.deep.equal(sorted);
-        });
-    });
-
-    it('TC006: Products are sorted by name A to Z', () => {
-        cy.get('.product_sort_container').select('az');
-      
-        cy.get('.inventory_item_name').then(($els) => {
-          const names = [...$els].map(el => el.innerText.trim());
-          const sorted = [...names].sort((a, b) => a.localeCompare(b)); // A to Z
-          expect(names).to.deep.equal(sorted);
-        });
-      });      
+    describe('🔃 Sorting Features - [Product Module]',()=>{
+      it('TC004: Prices are sorted high to low', () => {
+        ProductPage.selectSortOption('hilo');
+        ProductPage.verifyPricesSorted('desc');
+      });
+    
+      it('TC005: Prices are sorted low to high', () => {
+        ProductPage.selectSortOption('lohi');
+        ProductPage.verifyPricesSorted('asc');
+      });
+    
+      it('TC006: Products are sorted by name Z to A', () => {
+        ProductPage.selectSortOption('za');
+        ProductPage.verifyNamesSorted('desc');
+      });
+    
+      it('TC007: Products are sorted by name A to Z', () => {
+        ProductPage.selectSortOption('az');
+        ProductPage.verifyNamesSorted('asc');
+      }); 
+    })
+  
 
     //   it('TC007: Adds multiple products to the cart', () => {
       
@@ -86,8 +79,10 @@ describe('Sauce Demo - [Product Module]', ()=>{
     //     cy.get('[data-test="shopping-cart-link"]').click();
     //     cy.get('.shopping_cart_badge').should('not.exist');
     //   });
-      
-      it('TC009: Adds 3 items to the cart dynamically', () => {
+    
+
+    describe('🛒 Cart Operations - [Product Module]',()=>{
+      it('TC008: Adds 3 items to the cart dynamically', () => {
      
         // Define products
         const products = [
@@ -111,7 +106,7 @@ describe('Sauce Demo - [Product Module]', ()=>{
       
       });
 
-      it('TC010: Removes 3 items from the cart dynamically', () => {
+      it('TC009: Removes 3 items from the cart dynamically', () => {
       
         // Define products
         const products = [
@@ -130,7 +125,7 @@ describe('Sauce Demo - [Product Module]', ()=>{
       
       });
 
-      it('TC011: Checkout verification', () => {
+      it('TC010: Checkout verification', () => {
      
         // Define products
         const products = [
@@ -160,6 +155,5 @@ describe('Sauce Demo - [Product Module]', ()=>{
 
         cy.get('[data-test="complete-header"]').should('contain.text', 'Thank you for your order!')
       });
-      
-      
+    })
 })

@@ -95,7 +95,8 @@ This Cypress project is designed for robust end-to-end testing, incorporating be
 ## 🚀 Running Tests
 
   ```bash
-  npm test
+  npm test             // It will run all the test in default mode
+  You can use custom scripts from package.json to run the tests in various scenarios
   ```
 
 ## 📁 Project Structure
@@ -107,8 +108,6 @@ The tests follow a modular and maintainable structure:
 |     |-- workflows
 |          |-- cypress-tests.yml                # GitHub Actions CI/CD workflow
 |-- cypress
-|     |-- component
-|          |-- LoginForm.spec.jsx
 |     |-- e2e
 |          |-- performance
 |                |-- performanceTest.spec.js    

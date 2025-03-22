@@ -30,7 +30,7 @@ This repository contains a Test Automation Framework, built using Cypress and Ja
 | 🗂️ mochawesome-merge          | Merges multiple Mochawesome JSON reports into a single file.              |
 | 📄 cypress.config.js          | Custom test configuration with dynamic environment URLs and setup.        |
 | 📝 e2e.js (support file)      | Global hooks, reporter registration, and command imports.                 |
-| 📝 cypress.on (event listener)| To listen to the status of the test case whether passed or failed         !       |
+| 📝 cypress.on (event listener)| To listen to the status of the test case whether passed or failed         |
 | 🧾 cypress.urls.json          | Stores environment-specific base URLs (`prod`, `dev`, etc.).              |
 | 🐞 xlsx                      | Exports failed test details as `.xls` bug reports.                        |
 | 📁 cross-env                 | Passes `ENV=prod/dev` for environment-specific test runs.                 |
@@ -147,10 +147,13 @@ The tests follow a modular and maintainable structure:
 ## 🔄 Continuous Integration
 
 ##### This project uses GitHub Actions to run **Cypress E2E test suites** in parallel for:
-- 🧪 Integration Tests
-- 🛡️ Security Tests
-- 🚀 Performance Tests
-- 📱 Responsive Tests
+| 🧪 Test Type         | 🔍 Purpose & Scope                                                           |
+|----------------------|-----------------------------------------------------------------------------|
+| 🧪 Integration Tests | Validates functional flows and UI behavior (e.g., login, cart, checkout)    |
+| 🛡️ Security Tests     | Checks for vulnerabilities like brute force, XSS, SQL injection, etc.       |
+| 🚀 Performance Tests  | Verifies response time, speed under load, and performance regressions       |
+| 📱 Responsive Tests   | Ensures layout and elements render correctly across multiple screen sizes   |
+
 
 ##### 🚀 Workflow Triggers
 
@@ -162,19 +165,16 @@ The tests follow a modular and maintainable structure:
 ⚙️ What Each Job Does
 Each job (e.g. integration-tests) performs the following steps:
 
-----🧾 Checks out the repo
+| 🛠️ Step                                | 🔍 Purpose                                                                 |
+|----------------------------------------|----------------------------------------------------------------------------|
+| 🧾 Checkout Code                        | Clones your GitHub repository using `actions/checkout`                    |
+| 🧰 Setup Node.js                        | Installs Node.js v18 and caches `npm` dependencies for faster builds      |
+| 📦 Install Dependencies                 | Uses `npm ci --legacy-peer-deps` to install exact dependencies            |
+| 🌐 Set ENV Variable                     | Sets the `ENV=prod` variable to load environment-specific base URL        |
+| 🧪 Run Cypress Tests                    | Executes tests from a specific folder (e.g., `integration`, `security`)   |
+| 📄 Rename Mochawesome Report           | Renames dynamic report like `index.html_03252025_123456.html` to `index.html` |
+| 📤 Upload Mochawesome HTML Report       | Publishes the report as an artifact for easy download from GitHub Actions |
 
-🧰 Sets up Node.js 18 with caching
-
-📦 Installs dependencies with npm ci --legacy-peer-deps
-
-🌐 Sets the ENV=prod environment variable
-
-🧪 Runs Cypress tests for its specific folder
-
-📄 Renames the dynamic Mochawesome HTML report to index.html
-
-📤 Uploads the HTML report as a downloadable artifact
 
 ##### You can find the workflow file here:
 ```bash

@@ -14,8 +14,7 @@ describe('Sauce Demo - [Product Module] - 📦', ()=>{
         cy.clearAllCookies();
         cy.clearAllLocalStorage();
         cy.clearAllSessionStorage();
-        cy.log('--- Test Execution Completed ---');
-        cy.log('Status: ✅ Passed');
+        cy.logTestStatus();
     })
 
     describe('🧪 Page Load and Description - [Product Module]', ()=>{

@@ -20,3 +20,18 @@ import 'cypress-xpath'
 //import '@cypress/grep';
 //import registerCypressGrep from '@cypress/grep/src/support'
 //registerCypressGrep()
+
+// Global variable to track test failure
+let testFailed = false;
+
+// Listen for any test failure
+Cypress.on('fail', (error, runnable) => {
+  testFailed = true; // Mark this test as failed
+  throw error;       // Let Cypress still fail the test
+});
+
+// After each test, update Cypress.env so it can be read by custom commands
+afterEach(() => {
+  Cypress.env('testFailed', testFailed);
+  testFailed = false; // Reset for next test
+});

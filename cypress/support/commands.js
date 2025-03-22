@@ -24,3 +24,14 @@ Cypress.Commands.add('visitBaseUrl', (path = '') => {
   Cypress.Commands.add('logBug', (testCaseId, issueDescription, screenshotPath = '') => {
     cy.task('writeBugReport', { testCaseId, issueDescription, screenshotPath });
   });
+
+  Cypress.Commands.add('logTestStatus', () => {
+    cy.log('--- Test Execution Completed ---');
+    if (Cypress.env('testFailed')) {
+      cy.log('❌ Test Failed');
+    } else {
+      cy.log('✅ Test Passed');
+    }
+  });
+  
+  

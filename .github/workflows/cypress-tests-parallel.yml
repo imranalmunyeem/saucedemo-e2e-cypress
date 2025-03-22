@@ -1,4 +1,4 @@
-name: 🧪 Saucedemo - Cypress E2E Tests (Parallel)
+name: 🧪 SAUCEDEMO - E2E (Parallel)
 
 # 🚀 Triggers: Scheduled (Mon–Fri at 12:00 UTC) & Manual
 on:
@@ -39,7 +39,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          spec: cypress/e2e/integration/**/*.cy.js
+          spec: cypress/e2e/integration/**/*.spec.js
         env:
           ENV: ${{ matrix.environment }}
 

@@ -1,7 +1,6 @@
 const { defineConfig } = require("cypress");
 const fs = require('fs');
 const path = require('path');
-const xlsConfig = require("./cypress/plugins/xlsConfig");
 
 // Load URLs from `cypress.urls.json`
 function getUrlsConfig() {
@@ -55,14 +54,6 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // Implement Mochawesome Reporter
       require('cypress-mochawesome-reporter/plugin')(on);
-  
-      //require('@cypress/grep')(on, config);
-
-      //require('@cypress/grep/src/plugin')(on, config); // For grouping test cases
-      // XLS bug report task
-      on('task', {
-        writeBugReport: xlsConfig.writeBugReport,
-      });
 
       return config; // Always return the modified config
     },
@@ -74,14 +65,5 @@ module.exports = defineConfig({
     // Optional: Set the default timeout for commands and assertions
     defaultCommandTimeout: 10000,
   },
-
-  component: {
-    devServer: {
-      framework: 'react',
-      bundler: 'vite'
-    },
-    specPattern: 'cypress/component/*.spec.{js,jsx,ts,tsx}',
-    supportFile: 'cypress/support/component.js'
-  }
 
 });

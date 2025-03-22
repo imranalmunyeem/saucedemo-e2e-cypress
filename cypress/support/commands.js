@@ -19,11 +19,6 @@ Cypress.Commands.add('visitBaseUrl', (path = '') => {
     cy.get('#react-burger-menu-btn').click();
     cy.get('[data-test="logout-sidebar-link"]').click();
   });
-  
-
-  Cypress.Commands.add('logBug', (testCaseId, issueDescription, screenshotPath = '') => {
-    cy.task('writeBugReport', { testCaseId, issueDescription, screenshotPath });
-  });
 
   Cypress.Commands.add('logTestStatus', () => {
     cy.log('--- Test Execution Completed ---');

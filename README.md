@@ -30,6 +30,7 @@ This repository contains a Test Automation Framework, built using Cypress and Ja
 | 🗂️ mochawesome-merge          | Merges multiple Mochawesome JSON reports into a single file.              |
 | 📄 cypress.config.js          | Custom test configuration with dynamic environment URLs and setup.        |
 | 📝 e2e.js (support file)      | Global hooks, reporter registration, and command imports.                 |
+| 📝 cypress.on (event listener)| To listen to the status of the test case whether passed or failed         !       |
 | 🧾 cypress.urls.json          | Stores environment-specific base URLs (`prod`, `dev`, etc.).              |
 | 🐞 xlsx                      | Exports failed test details as `.xls` bug reports.                        |
 | 📁 cross-env                 | Passes `ENV=prod/dev` for environment-specific test runs.                 |

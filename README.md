@@ -11,7 +11,7 @@
 - [Configuration](#configuration)
 - [Continuous Integration](#-continuous-integration)
 - [Reporting](#reporting)
-- [Scripts] (#-cypress-custom-scripts)
+- [Scripts](#-cypress-custom-scripts)
 
 ## 📖 Introduction
 This repository contains a Test Automation Framework, built using Cypress and Javascript for automated testing for this site: https://www.saucedemo.com/

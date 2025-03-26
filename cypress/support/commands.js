@@ -1,4 +1,3 @@
-import * as XLSX from 'xlsx';
 
 Cypress.Commands.add('visitBaseUrl', (path = '') => {
     const baseUrl = Cypress.env('ENV') === 'dev'
